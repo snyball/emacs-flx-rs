@@ -77,7 +77,7 @@
          (name (if x86 "x86_64" "aarch64")))
     (pcase system-type
       ('windows-nt
-       (concat flx-rs-dyn-name "." name "-pc-windows-msvc.dll"))
+       (concat flx-rs-dyn-name "." name "-pc-windows-gnu.dll"))
       ('darwin
        (concat flx-rs-dyn-name "." name "-apple-darwin.dylib"))
       ((or 'gnu 'gnu/linux 'gnu/kfreebsd)

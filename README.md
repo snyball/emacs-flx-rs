@@ -8,16 +8,52 @@ Nix flake.
 It's a really bad idea to rely on opaque binaries checked into a git repository,
 the goal of this fork is to fix that.
 
-It currently only supports the x86_64-linux target, but support for aarch linux and
-Mac OSX may be added at a later stage.
+It currently supports building for the x86_64-linux and x86_64-windows targets,
+PRs adding more targets are welcome.
 
-Support for Windows can also be added, albeit only by cross-compiling with Nix.
+## 🔨 Setup
 
-## 🔨 Usage
+### NixOS
 
-Load by calling the following function,
+Add flake input,
+
+```nix
+emacs-flx-rs = {
+  url = "github:snyball/emacs-flx-rs";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+```
+
+Then add it to a `withPackages` invocation:
+```nix
+let 
+  my-emacs = (pkgs.emacs30-pgtk.pkgs.withPackages
+    (epkgs: [
+      inputs.emacs-flx-rs.defaultPackage.${system}
+    ])
+  );
+in
+{
+  home.packages = [
+    my-emacs
+  ]
+}
+```
+
+### Windows
+
+You can cross-compile this flake for Windows with the following command:
+
+```sh
+nix build '.#x86_64-pc-windows-gnu'
+```
+
+## Emacs setup
+
+Load in Emacs by calling the following function,
 
 ```el
+(require 'flx-rs)
 (flx-rs-load-dyn)
 ```
 

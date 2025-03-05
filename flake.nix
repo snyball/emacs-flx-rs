@@ -25,7 +25,13 @@
           cargo = toolchain;
           rustc = toolchain;
         };
-        rev = self.rev or self.dirtyRev;
+        mkInstall = from: to: ''
+          dir=$out/share/emacs/site-lisp
+          mkdir -p "$dir/lib"
+          mv ${from} ${to}
+          cp lisp/* "$dir"
+          rm -r "$out/bin" "$out/lib"
+        '';
       in
         rec {
           defaultPackage = packages.x86_64-unknown-linux-gnu;
@@ -35,13 +41,28 @@
             src = ./.;
             copyLibs = true;
             nativeBuildInputs = with pkgs; [toolchain];
-            postInstall = ''
-              dir=$out/share/emacs/site-lisp
-              mkdir -p "$dir/lib"
-              mv "$out/lib/libflx_rs_core.so" "$dir/lib/flx-rs.x86_64-unknown-linux-gnu.so"
-              cp lisp/* "$dir"
-              rmdir "$out/bin" "$out/lib"
-            '';
+            postInstall = mkInstall
+              ''"$out/lib/libflx_rs_core.so"''
+              ''"$dir/lib/flx-rs.x86_64-unknown-linux-gnu.so"'';
+          };
+          packages.x86_64-pc-windows-gnu = naersk-lib.buildPackage rec {
+            pname = "flx-rs";
+            ename = "flx-rs";
+            src = ./.;
+            copyLibs = true;
+            strictDeps = true;
+            depsBuildBuild = with pkgs; [
+              pkgsCross.mingwW64.stdenv.cc
+              pkgsCross.mingwW64.windows.pthreads
+            ];
+            nativeBuildInputs = with pkgs; [
+              wineWowPackages.stable
+              clang
+            ];
+            CARGO_BUILD_TARGET = "x86_64-pc-windows-gnu";
+            postInstall = mkInstall
+              ''"$out/lib/flx_rs_core.dll"''
+              ''"$dir/lib/flx-rs.${CARGO_BUILD_TARGET}.dll"'';
           };
           devShell = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
