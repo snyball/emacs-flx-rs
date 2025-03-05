@@ -1,5 +1,5 @@
 [package]
-name = "flx_rs_core"
+name = "emacs-flx-rs"
 version = "0.1.0"
 authors = ["Jen-Chieh Shen <jcs090218@gmail.com>"]
 edition = "2018"

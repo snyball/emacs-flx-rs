@@ -40,7 +40,7 @@
   :group 'flx)
 
 (defcustom flx-rs-bin-dir
-  (concat (file-name-directory load-file-name) "bin/")
+  (concat (file-name-directory load-file-name) "lib/")
   "Pre-built binaries directory path."
   :type 'directory
   :group 'flx-rs)
