@@ -69,6 +69,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "emacs-flx-rs"
+version = "0.1.2"
+dependencies = [
+ "emacs",
+ "flx-rs",
+]
+
+[[package]]
 name = "emacs-macros"
 version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -91,14 +99,6 @@ name = "flx-rs"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "527875f91e79acaf55e15dde02dd58f30168a93587b24cfe33219e8123366d31"
-
-[[package]]
-name = "flx_rs_core"
-version = "0.1.0"
-dependencies = [
- "emacs",
- "flx-rs",
-]
 
 [[package]]
 name = "fnv"
