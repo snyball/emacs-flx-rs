@@ -1,7 +1,7 @@
 # flx-rs
 > flx in Rust using dynamic module
 
-The `rust` implementation is under [the-flx/flx-rs](https://github.com/the-flx/flx-rs)
+The Rust implementation is under [the-flx/flx-rs](https://github.com/the-flx/flx-rs)
 ; this repo is a fork of [flx-rs](https://github.com/jcs-elpa/flx-rs) packaged as a
 Nix flake.
 
