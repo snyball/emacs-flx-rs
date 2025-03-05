@@ -11,7 +11,7 @@ the goal of this fork is to fix that.
 It currently supports building for the x86_64-linux and x86_64-windows targets,
 PRs adding more targets are welcome.
 
-## 🔨 Setup
+## Setup
 
 ### NixOS
 
@@ -63,7 +63,7 @@ Calculate the score with `PATTERN` and `SOURCE`:
 (flx-rs-score "something" "some else thing")
 ```
 
-## 💥 Replace `flx`
+## Replace `flx`
 
 To completely replace `flx` with this package, add the following line to your
 configuration.
@@ -72,15 +72,7 @@ configuration.
 (advice-add 'flx-score :override #'flx-rs-score)
 ```
 
-### 🔬 Build
-
-Use the Nix flake, the package will appear in `./result`.
-
-```
-$ nix build
-```
-
-## ⚜️ License
+## License
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
