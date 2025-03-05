@@ -36,10 +36,8 @@
             copyLibs = true;
             nativeBuildInputs = with pkgs; [toolchain];
             postInstall = ''
-              dir=$out/share/emacs/site-lisp/elpa/flx-rs
-              mkdir -p "$dir"
-              mv $out/lib "$dir"
-              cp lisp/* "$dir"
+              mv "$out/lib/libflx_rs_core.so" "$out/lib/flx-rs.x86_64-unknown-linux-gnu.so"
+              cp lisp/* "$out"
               rmdir "$out/bin"
             '';
           };
