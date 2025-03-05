@@ -30,12 +30,17 @@
         rec {
           defaultPackage = packages.x86_64-unknown-linux-gnu;
           packages.x86_64-unknown-linux-gnu = naersk-lib.buildPackage {
+            pname = "flx-rs";
+            ename = "flx-rs";
             src = ./.;
             copyLibs = true;
             nativeBuildInputs = with pkgs; [toolchain];
             postInstall = ''
-              cp lisp/* $out/
-              rmdir $out/bin
+              dir=$out/share/emacs/site-lisp/elpa/flx-rs
+              mkdir -p "$dir"
+              mv $out/lib "$dir"
+              cp lisp/* "$dir"
+              rmdir "$out/bin"
             '';
           };
           devShell = pkgs.mkShell {
