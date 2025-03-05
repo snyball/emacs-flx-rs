@@ -18,26 +18,31 @@
         pkgs = nixpkgs.legacyPackages.${system};
         manifest = (pkgs.lib.importTOML ./Cargo.toml).package;
         toolchain = fenix.packages.${system}.fromToolchainFile {
-          file = ./core/rust-toolchain.toml;
+          file = ./rust-toolchain.toml;
           sha256 = "sha256-vMlz0zHduoXtrlu0Kj1jEp71tYFXyymACW8L4jzrzNA=";
         };
         naersk-lib = naersk.lib.${system}.override {
           cargo = toolchain;
           rustc = toolchain;
         };
-        build-deps = with pkgs; [toolchain];
         rev = self.rev or self.dirtyRev;
       in
         rec {
           defaultPackage = packages.x86_64-unknown-linux-gnu;
           packages.x86_64-unknown-linux-gnu = naersk-lib.buildPackage {
-            src = ./core;
-            nativeBuildInputs = build-deps;
+            src = ./.;
+            copyLibs = true;
+            nativeBuildInputs = with pkgs; [toolchain];
+            postInstall = ''
+              cp lisp/* $out/
+              rmdir $out/bin
+            '';
           };
           devShell = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
+              toolchain
               taplo
-            ] ++ build-deps;
+            ];
           };
         }
     );
