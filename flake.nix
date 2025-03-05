@@ -36,9 +36,11 @@
             copyLibs = true;
             nativeBuildInputs = with pkgs; [toolchain];
             postInstall = ''
-              mv "$out/lib/libflx_rs_core.so" "$out/lib/flx-rs.x86_64-unknown-linux-gnu.so"
-              cp lisp/* "$out"
-              rmdir "$out/bin"
+              dir=$out/share/emacs/site-lisp
+              mkdir -p "$dir/lib"
+              mv "$out/lib/libflx_rs_core.so" "$dir/lib/flx-rs.x86_64-unknown-linux-gnu.so"
+              cp lisp/* "$dir"
+              rmdir "$out/bin" "$out/lib"
             '';
           };
           devShell = pkgs.mkShell {
