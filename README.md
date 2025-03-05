@@ -1,20 +1,17 @@
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![JCS-ELPA](https://raw.githubusercontent.com/jcs-emacs/badges/master/elpa/v/flx-rs.svg)](https://jcs-emacs.github.io/jcs-elpa/#/flx-rs)
-
 # flx-rs
 > flx in Rust using dynamic module
 
-[![CI](https://github.com/jcs-elpa/flx-rs/actions/workflows/test.yml/badge.svg)](https://github.com/jcs-elpa/flx-rs/actions/workflows/test.yml)
-[![Activate](https://github.com/jcs-elpa/flx-rs/actions/workflows/activate.yml/badge.svg)](https://github.com/jcs-elpa/flx-rs/actions/workflows/activate.yml)
-
-[![Build Windows](https://github.com/jcs-elpa/flx-rs/actions/workflows/build_win.yml/badge.svg)](https://github.com/jcs-elpa/flx-rs/actions/workflows/build_win.yml)
-[![Build macOS](https://github.com/jcs-elpa/flx-rs/actions/workflows/build_macos.yml/badge.svg)](https://github.com/jcs-elpa/flx-rs/actions/workflows/build_macos.yml)
-[![Build Linux](https://github.com/jcs-elpa/flx-rs/actions/workflows/build_linux.yml/badge.svg)](https://github.com/jcs-elpa/flx-rs/actions/workflows/build_linux.yml)
-
 The `rust` implementation is under [the-flx/flx-rs](https://github.com/the-flx/flx-rs)
-; hence this repo will only contain releases to ELPA and ready-to-use binary files.
+; this repo is a fork of [flx-rs](https://github.com/jcs-elpa/flx-rs) packaged as a
+Nix flake.
 
-This is a fork to remove the opaque binaries in the git repo.
+It's a really bad idea to rely on opaque binaries checked into a git repository,
+the goal of this fork is to fix that.
+
+It currently only supports the x86_64-linux target, but support for aarch linux and
+Mac OSX may be added at a later stage.
+
+Support for Windows can also be added, albeit only by cross-compiling with Nix.
 
 ## 🔨 Usage
 
