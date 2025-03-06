@@ -8,8 +8,8 @@ Nix flake.
 It's a really bad idea to rely on opaque binaries checked into a git repository,
 the goal of this fork is to fix that.
 
-It currently supports building for the x86_64-linux and x86_64-windows targets,
-PRs adding more targets are welcome.
+It currently supports building for the {x86_64,aarch64}-linux and
+x86_64-windows targets, PRs adding more targets are welcome.
 
 ## Setup
 
@@ -45,7 +45,7 @@ in
 You can cross-compile this flake for Windows with the following command:
 
 ```sh
-nix build '.#x86_64-pc-windows-gnu'
+nix build '.#x86_64-windows'
 ```
 
 ## Emacs setup

@@ -25,27 +25,47 @@
           cargo = toolchain;
           rustc = toolchain;
         };
-        mkInstall = from: to: ''
-          dir=$out/share/emacs/site-lisp
-          mkdir -p "$dir/lib"
-          mv ${from} ${to}
-          cp lisp/* "$dir"
-          rm -r "$out/bin" "$out/lib"
-        '';
+        mkLinux = tgt: override: naersk-lib.buildPackage ({
+          pname = "flx-rs";
+          ename = "flx-rs";
+          src = ./.;
+          copyLibs = true;
+          nativeBuildInputs = with pkgs; [toolchain];
+          CARGO_BUILD_TARGET = tgt;
+          postInstall = ''
+            dir=$out/share/emacs/site-lisp
+            mkdir -p "$dir/lib"
+            mv "$out/lib/libflx_rs_core.so" "$dir/lib/flx-rs.${tgt}.so"
+            cp lisp/* "$dir"
+            rm -r "$out/bin" "$out/lib"
+          '';
+        } // override);
+        x86_64-linux = ((import nixpkgs) {
+          inherit system;
+          crossSystem = {
+            config = "x86_64-unknown-linux-gnu";
+          };
+        });
+        aarch64-linux = ((import nixpkgs) {
+          inherit system;
+          crossSystem = {
+            config = "aarch64-unknown-linux-gnu";
+          };
+        });
       in
         rec {
-          defaultPackage = packages.x86_64-unknown-linux-gnu;
-          packages.x86_64-unknown-linux-gnu = naersk-lib.buildPackage {
-            pname = "flx-rs";
-            ename = "flx-rs";
-            src = ./.;
-            copyLibs = true;
-            nativeBuildInputs = with pkgs; [toolchain];
-            postInstall = mkInstall
-              ''"$out/lib/libflx_rs_core.so"''
-              ''"$dir/lib/flx-rs.x86_64-unknown-linux-gnu.so"'';
+          defaultPackage = packages.${system};
+          packages.x86_64-linux = mkLinux "x86_64-unknown-linux-gnu" {
+            depsBuildBuild = [x86_64-linux.stdenv.cc];
+            CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = with x86_64-linux.stdenv;
+              "${cc}/bin/${cc.targetPrefix}gcc";
           };
-          packages.x86_64-pc-windows-gnu = naersk-lib.buildPackage rec {
+          packages.aarch64-linux = mkLinux "aarch64-unknown-linux-gnu" {
+            depsBuildBuild = [aarch64-linux.stdenv.cc];
+            CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = with aarch64-linux.stdenv;
+              "${cc}/bin/${cc.targetPrefix}gcc";
+          };
+          packages.x86_64-windows = naersk-lib.buildPackage rec {
             pname = "flx-rs";
             ename = "flx-rs";
             src = ./.;
@@ -60,9 +80,11 @@
               clang
             ];
             CARGO_BUILD_TARGET = "x86_64-pc-windows-gnu";
-            postInstall = mkInstall
-              ''"$out/lib/flx_rs_core.dll"''
-              ''"$dir/lib/flx-rs.${CARGO_BUILD_TARGET}.dll"'';
+            postInstall = ''
+              mv "$out/lib/flx_rs_core.dll" "$out/lib/flx-rs.${CARGO_BUILD_TARGET}.dll"
+              cp lisp/* "$out"
+              rm -r "$out/bin" "$out/lib/libflx_rs_core.dll.a"
+            '';
           };
           devShell = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
